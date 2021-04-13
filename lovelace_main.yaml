@@ -1,0 +1,522 @@
+views:
+  - title: '1'
+    path: '1'
+    popup_cards:
+      climate.thermostat_2:
+        title: Heating
+        card:
+          type: vertical-stack
+          cards:
+            - type: 'custom:simple-thermostat'
+              entity: climate.thermostat_2
+              name: Hive
+              sensors:
+                - entity: sensor.thermostat_2_battery_level
+                  name: Battery Level
+                - entity: sensor.cumnock_temperature
+                  name: Outside Temperature
+                - entity: sensor.thermostat_2_availability
+                  name: Availability
+                - entity: binary_sensor.hive_hub_status
+                  step_layout: coloum
+            - type: 'custom:mini-graph-card'
+              entities:
+                - sensor.thermostat_2_current_temperature
+                - sensor.thermostat_2_target_temperature
+      group.family_at_home:
+        title: Presence
+        card:
+          type: grid
+          title: Who's home?
+          square: false
+          columns: 2
+          cards:
+            - type: picture-entity
+              entity: person.peter
+              state_image:
+                home: /local/peter1.jpg
+                not_home: /local/bw_peter.jpg
+              tap_action:
+                action: none
+            - type: picture-entity
+              entity: person.claire
+              state_image:
+                home: /local/claire1.jpg
+                not_home: /local/bw_claire.jpg
+              tap_action:
+                action: none
+            - type: picture-entity
+              entity: person.jade
+              state_image:
+                home: /local/jade1.jpg
+                not_home: /local/bw_jade.jpg
+              tap_action:
+                action: none
+            - type: picture-entity
+              entity: person.cody
+              state_image:
+                home: /local/cody1.jpg
+                not_home: /local/bw_cody.jpg
+              tap_action:
+                action: none
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: 'custom:circle-sensor-card'
+                entity: group.family_at_home
+                name: Presence
+                fill: 'rgb(25, 25, 25)'
+                stroke_width: 10
+              - type: 'custom:circle-sensor-card'
+                entity: group.lights_group_dash
+                name: Lights
+                fill: 'rgb(25, 25, 25)'
+                stroke_width: 10
+              - type: 'custom:circle-sensor-card'
+                entity: light.livingroom_lamp
+                name: Security
+                fill: 'rgb(25, 25, 25)'
+                stroke_width: 10
+              - type: 'custom:circle-sensor-card'
+                entity: climate.thermostat_2
+                name: Thermostat
+                max: 32
+                min: 5
+                fill: 'rgb(25, 25, 25)'
+                stroke_width: 10
+                gradient: true
+                units: °C
+                attribute: current_temperature
+                color_stops:
+                  '18': '#0000FF'
+                  '24': '#FF0000'
+      - type: grid
+        square: false
+        cards:
+          - type: 'custom:button-card'
+            color_type: card
+            color: auto
+            icon: 'mdi:thermostat'
+            name: Heating
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: call-service
+                service: browser_mod.popup
+                service_data:
+                  deviceID: this
+                  title: Heating
+                  card:
+                    type: vertical-stack
+                    cards:
+                      - type: 'custom:simple-thermostat'
+                        entity: climate.thermostat_2
+                        name: Hive
+                        sensors:
+                          - entity: sensor.thermostat_2_battery_level
+                            name: Battery Level
+                          - entity: sensor.cumnock_temperature
+                            name: Outside Temperature
+                          - entity: sensor.thermostat_2_availability
+                            name: Availability
+                          - entity: binary_sensor.hive_hub_status
+                        step_layout: coloum
+                      - entities:
+                          - entity: climate.thermostat_2
+                            name: Hive
+                            hours_to_show: 24
+                            refresh_interval: 0
+                        title: Hive Usage
+                        type: history-graph
+          - type: 'custom:button-card'
+            color_type: card
+            color: auto
+            icon: 'mdi:sofa'
+            name: Livingroom
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: call-service
+                service: browser_mod.popup
+                service_data:
+                  deviceID: this
+                  title: Livingroom
+                  card:
+                    type: vertical-stack
+                    square: false
+                    cards:
+                      - type: grid
+                        title: Lights
+                        square: false
+                        cards:
+                          - type: 'custom:button-card'
+                            entity: switch.circadian_lighting_livingroom
+                            name: Circadian
+                            hold_action:
+                              action: more-info
+                          - type: 'custom:button-card'
+                            entity: light.livingroom_lamp
+                            name: Lamp
+                            icon: 'mdi:floor-lamp'
+                            hold_action:
+                              action: more-info
+                          - type: 'custom:button-card'
+                            entity: switch.oil_burner
+                            icon: 'mdi:fire'
+                            hold_action:
+                              action: more-info
+                          - type: 'custom:button-card'
+                            entity: light.ceiling_bulbs
+                            hold_action:
+                              action: more-info
+                          - type: 'custom:button-card'
+                            entity: light.ceiling_bulb_1
+                            icon: 'mdi:globe-light'
+                            hold_action:
+                              action: more-info
+                          - type: 'custom:button-card'
+                            entity: light.ceiling_bulb_2
+                            icon: 'mdi:globe-light'
+                            hold_action:
+                              action: more-info
+                      - type: vertical-stack
+                        cards:
+                          - type: 'custom:mini-media-player'
+                            title: Alexa
+                            artwork: full-cover
+                            entity: media_player.livingroom_echo_dot
+                            icon: 'mdi:amazon'
+                            tts:
+                              enity_id: media_player.livingroom_echo_dot
+                              platform: alexa
+                      - type: 'custom:mini-media-player'
+                        artwork: full-cover
+                        entity: media_player.sky_q
+                        idle_view:
+                          when_idle: true
+                          when_standby: true
+                        info: scroll
+                        sound_mode: full
+                      - type: 'custom:mini-media-player'
+                        artwork: full-cover
+                        entity: media_player.livingroom_tv
+                        hide:
+                          source: true
+                        icon: 'mdi:television'
+                        idle_view: '[object Object]'
+                        info: scroll
+                        shortcuts:
+                          buttons:
+                            - icon: 'mdi:microsoft-xbox'
+                              id: XBOX One
+                              type: source
+                            - icon: 'mdi:web'
+                              id: Internet
+                              type: source
+                            - icon: 'mdi:netflix'
+                              id: Netflix
+                              type: source
+                            - icon: 'mdi:amazon'
+                              id: Prime Video
+                              type: source
+                            - icon: 'mdi:youtube'
+                              id: YouTube
+                              type: source
+                            - icon: 'mdi:plex'
+                              id: Plex
+                              type: source
+                            - name: BBC iPlayer
+                              id: BBC iPlayer
+                              type: source
+                            - name: Disney+
+                              id: Disney+
+                              type: source
+                            - name: Sky Q
+                              id: BSkyB
+                              type: source
+                          columns: 3
+                        sound_mode: full
+                        volume_stateless: true
+                        source: icon
+                      - type: 'custom:mini-media-player'
+                        artwork: full-cover
+                        entity: media_player.xboxone
+                        icon: 'mdi:microsoft-xbox'
+                        idle_view:
+                          when_idle: true
+                          when_standby: true
+                        info: scroll
+                        sound_mode: full
+          - type: 'custom:button-card'
+            color_type: card
+            color: auto
+            icon: 'mdi:fridge'
+            name: Kitchen
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: call-service
+                service: browser_mod.popup
+                service_data:
+                  deviceID: this
+                  title: Kitchen
+                  card:
+                    type: vertical-stack
+                    cards:
+                      - type: glance
+                        entities:
+                          - entity: switch.washing_machine
+                            name: WM State
+                          - entity: sensor.wm_in_watts
+                            name: WM Energy
+                          - entity: switch.tumble_dryer
+                            name: Dryer State
+                          - entity: sensor.td_in_watts
+                            name: Dryer Energy
+                            title: Washing Machine & Tumble Dryer
+                            show_name: false
+                        state_color: true
+                      - type: 'custom:mini-graph-card'
+                        name: Power usage
+                        hours_to_show: 24
+                        entities:
+                          - entity: sensor.wm_in_watts
+                            name: Washing Machine
+                            unit: W
+                          - entity: sensor.td_in_watts
+                            name: Tumble Dryer
+                            unit: W
+          - type: 'custom:button-card'
+            color_type: card
+            color: auto
+            icon: 'mdi:stairs'
+            name: Stairs
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: call-service
+                service: browser_mod.popup
+                service_data:
+                  deviceID: this
+                  title: Stairs
+                  card:
+                    type: grid
+                    square: false
+                    cards:
+                      - type: 'custom:button-card'
+                        entity: light.landing_bulb
+                        name: Landing
+                        icon: 'mdi:globe-light'
+                        hold_action:
+                          action: more-info
+                      - type: 'custom:button-card'
+                        entity: light.hall_light
+                        name: Hall
+                        icon: 'mdi:globe-light'
+                        hold_action:
+                          action: more-info
+                      - type: 'custom:button-card'
+                        entity: light.loft_bulb
+                        icon: 'mdi:globe-light'
+                        hold_action:
+                          action: more-info
+                      - type: 'custom:button-card'
+                        entity: switch.landinglamp
+                        icon: 'mdi:lamp'
+                        hold_action:
+                          action: more-info
+                      - type: 'custom:button-card'
+                        entity: switch.landingoilburner
+                        icon: 'mdi:fire'
+                        hold_action:
+                          action: more-info
+          - type: 'custom:button-card'
+            color_type: card
+            color: auto
+            icon: 'mdi:shower'
+            name: Bathroom
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: call-service
+                service: browser_mod.popup
+                service_data:
+                  deviceID: this
+                  title: Bathroom
+                  card:
+                    type: grid
+                    square: false
+                    cards:
+                      - type: 'custom:button-card'
+                        entity: switch.sonoff_bathroom_light
+                        name: Bathroom
+                        icon: 'mdi:dome-light'
+                        lock:
+                          enabled: true
+                        hold_action:
+                          action: more-info
+          - type: 'custom:button-card'
+            color_type: card
+            color: auto
+            icon: 'mdi:sprout'
+            name: Garden
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: call-service
+                service: browser_mod.popup
+                service_data:
+                  deviceID: this
+                  title: Garden
+                  card:
+                    type: vertical-stack
+                    cards:
+                      - type: 'custom:mini-graph-card'
+                        name: Temperature
+                        hours_to_show: 24
+                        entities:
+                          - entity: sensor.cumnock_temperature
+                            name: Cumnock Temperature
+                            unit: °C
+                          - entity: sensor.small_greenhouse_temperature
+                            name: Small Greenhouse
+                            unit: °C
+                          - entity: sensor.large_greenhouse_temperature
+                            name: Large Greenhouse
+                            unit: °C
+                      - type: 'custom:mini-graph-card'
+                        name: Humidity
+                        hours_to_show: 24
+                        entities:
+                          - entity: sensor.small_greenhouse_humidity
+                            name: Small Greenhouse
+                            unit: '%RH'
+                          - entity: sensor.small_greenhouse_humidity
+                            name: Large Greenhouse
+                            unit: '%RH'
+          - type: 'custom:button-card'
+            color_type: card
+            color: auto
+            icon: 'mdi:face-woman'
+            name: Jade's Bedroom
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: call-service
+                service: browser_mod.popup
+                service_data:
+                  deviceID: this
+                  title: Jade
+                  card:
+                    type: vertical-stack
+                    square: false
+                    cards:
+                      - type: grid
+                        title: Lights
+                        square: false
+                        cards:
+                          - type: 'custom:button-card'
+                            entity: light.jades_bulb
+                            name: Ceiling
+                            icon: 'mdi:globe-light'
+                            hold_action:
+                              action: more-info
+                      - type: vertical-stack
+                        cards:
+                          - type: 'custom:mini-media-player'
+                            artwork: full-cover
+                            entity: media_player.jade_s_bedroom_speaker
+                            icon: 'mdi:google'
+                            tts:
+                              enity_id: media_player.jade_s_bedroom_speaker
+                              platform: google_translate
+                          - type: 'custom:mini-media-player'
+                            artwork: full-cover
+                            entity: media_player.bedroom_tv_jade
+                            hide:
+                              source: true
+                            icon: 'mdi:television'
+                            idle_view:
+                              when_idle: true
+                              when_standby: true
+                            info: scroll
+                            sound_mode: full
+                            volume_stateless: true
+          - type: 'custom:button-card'
+            color_type: card
+            color: auto
+            icon: 'mdi:face'
+            name: Cody's Bedroom
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: call-service
+                service: browser_mod.popup
+                service_data:
+                  deviceID: this
+                  title: Cody
+                  card:
+                    type: grid
+                    square: false
+                    cards:
+                      - type: 'custom:button-card'
+                        entity: switch.sonoff_codys_light
+                        lock:
+                          enabled: true
+                        name: Ceiling
+                        icon: 'mdi:globe-light'
+                        hold_action:
+                          action: more-info
+          - type: 'custom:button-card'
+            color_type: card
+            color: auto
+            icon: 'mdi:account-supervisor-outline'
+            name: C&P Bedroom
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: call-service
+                service: browser_mod.popup
+                service_data:
+                  deviceID: this
+                  title: Parents
+                  card:
+                    type: vertical-stack
+                    square: false
+                    cards:
+                      - type: grid
+                        title: Lights
+                        square: false
+                        cards:
+                          - type: 'custom:button-card'
+                            entity: switch.circadian_lighting_bedroom
+                            name: Circadian
+                            hold_action:
+                              action: more-info
+                          - type: 'custom:button-card'
+                            entity: light.bedroom_bulb
+                            icon: 'mdi:globe-light'
+                            name: Ceiling
+                            hold_action:
+                              action: more-info
+                          - type: 'custom:button-card'
+                            entity: switch.bedroom_tv
+                            icon: 'mdi:television'
+                            name: TV
+                            hold_action:
+                              action: more-info
+                      - type: vertical-stack
+                        cards:
+                          - type: 'custom:mini-media-player'
+                            artwork: full-cover
+                            entity: media_player.master_bedroom_echo_dot
+                            icon: 'mdi:amazon'
+                            tts:
+                              enity_id: media_player.master_bedroom_echo_dot
+                              platform: alexa
+                          - type: 'custom:mini-media-player'
+                            artwork: full-cover
+                            entity: media_player.android_tv
+                            icon: 'mdi:amazon'
